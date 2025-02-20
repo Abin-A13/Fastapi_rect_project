@@ -26,6 +26,15 @@ async def get_users(db: AsyncSession = Depends(get_db)):
     users = result.scalars().all()
     return users
 
+@router.get("/{user_id}", response_model=UserResponse)
+async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
+
+
 @router.delete("/", response_model=dict)
 async def delete_all_users(db: AsyncSession = Depends(get_db)):
     # Fetch all users

@@ -28,7 +28,9 @@ const RegistrationForm: React.FC = () => {
     setError(null);
 
     try {
-      const response = await axios.post(API_URL, formData,{headers:{"Content-Type": "application/json",}});
+      const response = await axios.post(API_URL, formData, {
+        headers: { "Content-Type": "application/json" },
+      });
       addUser(response.data); // Add user to context
       console.log("User created:", response.data);
       navigate("/results"); // Navigate to result page
@@ -47,13 +49,36 @@ const RegistrationForm: React.FC = () => {
   return (
     <form onSubmit={handleValidate}>
       {error && <div className="alert alert-danger">{error}</div>}
-      <InputField label="First Name" type="text" name="first_name" value={formData.first_name} onChange={handleChange} required />
-      <InputField label="Last Name" type="text" name="last_name" value={formData.last_name} onChange={handleChange} required />
-      <InputField label="Email" type="email" name="email" value={formData.email} onChange={handleChange} required />
+      <InputField
+        label="First Name"
+        type="text"
+        name="first_name"
+        value={formData.first_name}
+        onChange={handleChange}
+        required
+      />
+      <InputField
+        label="Last Name"
+        type="text"
+        name="last_name"
+        value={formData.last_name}
+        onChange={handleChange}
+        required
+      />
+      <InputField
+        label="Email"
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+      />
       <button type="submit" className="btn btn-success m-3" disabled={loading}>
         {loading ? "Submitting..." : "Validate"}
       </button>
-      <button type="button" className="btn btn-secondary" onClick={handleReset} disabled={loading}>Reset</button>
+      <button type="button" className="btn btn-secondary" onClick={handleReset} disabled={loading}>
+        Reset
+      </button>
     </form>
   );
 };
