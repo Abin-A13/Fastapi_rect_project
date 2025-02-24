@@ -1,5 +1,5 @@
 from app.database import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime, func
 
 
 class User(Base):
@@ -9,3 +9,4 @@ class User(Base):
     first_name = Column(String, index=True)
     last_name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)

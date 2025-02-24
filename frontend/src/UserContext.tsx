@@ -3,10 +3,10 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 
 interface User {
   id?: number; // Optional id field, if provided by your backend
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  timestamp: string;
+  created_at: string;
 }
 
 interface UserContextType {
@@ -39,7 +39,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Poll the API every 5 seconds for realtime updates
   useEffect(() => {
     fetchUsers(); // initial fetch
-    const interval = setInterval(fetchUsers, 5000);
+    const interval = setInterval(fetchUsers, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -50,13 +50,19 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         headers: { "Content-Type": "application/json" },
       });
       console.log("User created:", response.data);
+      
       // Update the user list after creation
       await fetchUsers();
     } catch (err) {
-      console.error("Error adding user:", err);
+      if (axios.isAxiosError(err)) {
+        console.error("Axios error adding user:", err.response?.data || err.message);
+      } else {
+        console.error("Error adding user:", err);
+      }
       setError(err instanceof Error ? err.message : "Failed to register user");
     }
   };
+  
 
   // Delete all users (from local state)
   const deleteAllUsers = async () => {

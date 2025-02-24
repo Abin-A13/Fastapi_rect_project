@@ -9,7 +9,14 @@ interface InputFieldProps {
   required?: boolean;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ label, type, name, value, onChange, required }) => {
+const InputField: React.FC<InputFieldProps> = ({
+  label,
+  type,
+  name,
+  value,
+  onChange,
+  required,
+}) => {
   return (
     <div className="mb-3">
       <label className="form-label">{label}</label>

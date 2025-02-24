@@ -6,7 +6,7 @@ class UserBase(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
 
 class UserCreate(UserBase):
     pass
