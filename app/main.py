@@ -5,15 +5,14 @@ from app.database import engine, Base
 
 app = FastAPI()
 
-# CORS Setup
+# Add CORS middleware before including any routes
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins
+    allow_origins=["*"],  # Allow all origins for now
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
-
 # Register routers
 app.include_router(user_routes.router)
 app.include_router(websocket.router)

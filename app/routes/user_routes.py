@@ -10,15 +10,17 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 @router.post("/", response_model=UserResponse)
 async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
-    db_user = User(first_name=user.first_name, last_name=user.last_name, email=user.email)
-    db.add(db_user)
-    await db.commit()
-    await db.refresh(db_user)
-    
-    # Send real-time updates to WebSocket clients
-    await broadcast_users(db)
-    
-    return db_user
+    exist_user = await db.execute(select(User).where(User.email == user.email))
+    if exist_user.scalar_one_or_none():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+    else:
+        db_user = User(first_name=user.first_name, last_name=user.last_name, email=user.email)
+        db.add(db_user)
+        await db.commit()
+        await db.refresh(db_user)
+        # Send real-time updates to WebSocket clients
+        await broadcast_users(db)
+        return db_user
 
 @router.get("/", response_model=list[UserResponse])
 async def get_users(db: AsyncSession = Depends(get_db)):
